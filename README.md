@@ -37,8 +37,9 @@ my-nodejs-app
 ## Usage
 
 To start the application, run:
+
 ```
-npm start
+npm run dev
 ```
 
 The application will be running on `http://localhost:3000`.

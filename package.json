@@ -1,0 +1,31 @@
+{
+  "name": "my-nodejs-app",
+  "version": "1.0.0",
+  "description": "A basic Node.js application using Express.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.17.1",
+    "express-validator": "^7.2.1",
+    "prettier": "^3.5.3",
+    "uuid": "^11.1.0"
+  },
+  "author": "Steen Sargent",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sargent88/BE-MERN-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sargent88/BE-MERN-app/issues"
+  },
+  "homepage": "https://github.com/sargent88/BE-MERN-app#readme"
+}

@@ -36,6 +36,8 @@ my-nodejs-app
 
 ## Usage
 
+You will need a Google Maps API key. Create an API key and add it locally to your repo in a `.env` file (called `GOOGLE_API_KEY`).
+
 To start the application, run:
 
 ```

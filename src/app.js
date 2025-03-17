@@ -1,5 +1,8 @@
 const express = require("express");
+const mongoose = require("mongoose");
 require("dotenv").config(); // Load environment variables from .env file
+
+const HttpError = require("./models/httpError");
 
 const { setPlacesRoutes } = require("./routes/places");
 const { setUsersRoutes } = require("./routes/users");
@@ -31,6 +34,14 @@ app.use((err, req, res, next) => {
     .json({ error: err.message || "An unknown error occurred!" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });

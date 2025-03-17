@@ -38,6 +38,8 @@ my-nodejs-app
 
 You will need a Google Maps API key. Create an API key and add it locally to your repo in a `.env` file (called `GOOGLE_API_KEY`).
 
+You will also need a MongoDB. Create a DB and add you connection string to your repo in a `.env` file (called `MONGODB_URI`)
+
 To start the application, run:
 
 ```

@@ -3,18 +3,16 @@ const { check } = require("express-validator");
 
 const {
   createPlace,
-  deletePlace,
-  getPlace,
-  getPlaces,
+  deletePlaceById,
+  getPlaceById,
   getPlacesForUser,
-  updatePlace,
+  updatePlaceById,
 } = require("../controllers/places");
 
 function setPlacesRoutes(app) {
   const router = express.Router();
 
-  router.get("/", getPlaces);
-  router.get("/:pid", getPlace);
+  router.get("/:pid", getPlaceById);
   router.get("/user/:uid", getPlacesForUser);
 
   router.post(
@@ -30,10 +28,10 @@ function setPlacesRoutes(app) {
   router.patch(
     "/:pid",
     [check("title").notEmpty(), check("description").isLength({ min: 5 })],
-    updatePlace
+    updatePlaceById
   );
 
-  router.delete("/:pid", deletePlace);
+  router.delete("/:pid", deletePlaceById);
 
   app.use("/api/v1/places", router);
 }

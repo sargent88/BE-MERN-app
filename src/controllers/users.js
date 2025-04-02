@@ -69,7 +69,7 @@ async function createUser(req, res, next) {
     name,
     email,
     password,
-    image: "https://via.placeholder.com/150",
+    image: `https://placehold.co/150X150?text=${name.split(" ").join("+")}`,
     places: [],
   });
 

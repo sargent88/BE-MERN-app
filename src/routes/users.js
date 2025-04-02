@@ -18,7 +18,7 @@ function setUsersRoutes(app) {
     "/signup",
     [
       check("name").notEmpty(),
-      check("email").normalizeEmail().isEmail(),
+      check("email").normalizeEmail({ gmail_remove_dots: false }).isEmail(),
       check("password").isLength({ min: 6 }),
     ],
     createUser

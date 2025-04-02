@@ -70,7 +70,7 @@ async function createPlace(req, res, next) {
     title,
     description,
     address,
-    image: "https://via.placeholder.com/150",
+    image: `https://placehold.co/150X150?text=${title.split(" ").join("+")}`,
     location: coordinates,
     creator,
   });

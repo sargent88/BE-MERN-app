@@ -102,7 +102,12 @@ async function loginUser(req, res, next) {
     );
   }
 
-  res.status(201).json({ message: "Logged in!" });
+  res
+    .status(201)
+    .json({
+      message: "Logged in!",
+      user: isExistingUser.toObject({ getters: true }),
+    });
 }
 
 module.exports = { createUser, getUser, getUsers, loginUser };

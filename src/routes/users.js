@@ -7,6 +7,7 @@ const {
   getUsers,
   loginUser,
 } = require("../controllers/users");
+const fileUpload = require("../middleware/fileUpload");
 
 function setUsersRoutes(app) {
   const router = express.Router();
@@ -16,6 +17,7 @@ function setUsersRoutes(app) {
 
   router.post(
     "/signup",
+    fileUpload.single("image"),
     [
       check("name").notEmpty(),
       check("email").normalizeEmail({ gmail_remove_dots: false }).isEmail(),

@@ -69,7 +69,8 @@ async function createUser(req, res, next) {
     name,
     email,
     password,
-    image: `https://placehold.co/150X150?text=${name.split(" ").join("+")}`,
+    // image: `https://placehold.co/150X150?text=${name.split(" ").join("+")}`, // placeholder image
+    image: req.file.path,
     places: [],
   });
 
@@ -102,12 +103,10 @@ async function loginUser(req, res, next) {
     );
   }
 
-  res
-    .status(201)
-    .json({
-      message: "Logged in!",
-      user: isExistingUser.toObject({ getters: true }),
-    });
+  res.status(201).json({
+    message: "Logged in!",
+    user: isExistingUser.toObject({ getters: true }),
+  });
 }
 
 module.exports = { createUser, getUser, getUsers, loginUser };

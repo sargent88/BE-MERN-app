@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
+const fs = require("fs");
 
 const HttpError = require("../models/httpError");
 const getCoordsForAddress = require("../utils/locations");
@@ -70,7 +71,8 @@ async function createPlace(req, res, next) {
     title,
     description,
     address,
-    image: `https://placehold.co/150X150?text=${title.split(" ").join("+")}`,
+    // image: `https://placehold.co/150X150?text=${title.split(" ").join("+")}`, // placeholder image
+    image: req.file.path,
     location: coordinates,
     creator,
   });
@@ -154,6 +156,8 @@ async function deletePlaceById(req, res, next) {
     return next(new HttpError("Could not find place for this id.", 404));
   }
 
+  const imagePath = place.image;
+
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -166,6 +170,10 @@ async function deletePlaceById(req, res, next) {
       new HttpError("Something went wrong, could not delete place.", 500)
     );
   }
+
+  fs.unlink(imagePath, (err) => {
+    console.log("File removed successfully", err);
+  });
 
   res.status(200).json({ message: "Deleted place." });
 }

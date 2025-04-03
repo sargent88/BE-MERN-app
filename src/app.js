@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 require("dotenv").config(); // Load environment variables from .env file
 
 const HttpError = require("./models/httpError");
@@ -24,6 +26,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 // Initialize routes
 setPlacesRoutes(app);
@@ -37,6 +40,11 @@ app.use((req, res, next) => {
 
 // Handle Errors
 app.use((err, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log("File removed successfully", err);
+    });
+  }
   if (res.headersSent) {
     return next(err);
   }

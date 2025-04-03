@@ -22,3 +22,9 @@ yarn-error.log*
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# Ignore all files inside uploads/images
+uploads/images/*
+
+# Allow the directory itself to be tracked
+!uploads/images/.gitkeep

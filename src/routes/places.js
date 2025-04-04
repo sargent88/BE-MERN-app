@@ -9,13 +9,18 @@ const {
   updatePlaceById,
 } = require("../controllers/places");
 const fileUpload = require("../middleware/fileUpload");
+const checkAuthorization = require("../middleware/checkAuthorization");
 
 function setPlacesRoutes(app) {
   const router = express.Router();
 
+  // UNPROTECTED ROUTES
   router.get("/:pid", getPlaceById);
   router.get("/user/:uid", getPlacesForUser);
 
+  router.use(checkAuthorization);
+
+  // PROTECTED ROUTES
   router.post(
     "/",
     fileUpload.single("image"),

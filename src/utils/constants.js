@@ -1,7 +1,5 @@
 export const MIME_TYPES = {
-  image: {
-    jpg: "image/jpeg",
-    jpeg: "image/jpeg",
-    png: "image/png",
-  },
+  "image/png": "png",
+  "image/jpeg": "jpeg",
+  "image/jpg": "jpg",
 };

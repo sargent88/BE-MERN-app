@@ -7,8 +7,8 @@ require("dotenv").config(); // Load environment variables from .env file
 
 const HttpError = require("./models/httpError");
 
-const { setPlacesRoutes } = require("./routes/places");
-const { setUsersRoutes } = require("./routes/users");
+const placesRoutes = require("./routes/places");
+const usersRoutes = require("./routes/users");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -28,9 +28,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
-// Initialize routes
-setPlacesRoutes(app);
-setUsersRoutes(app);
+// Initialize V1 routes
+app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/places", placesRoutes);
 
 // Handle 404 Errors
 app.use((req, res, next) => {
@@ -41,22 +41,35 @@ app.use((req, res, next) => {
 // Handle Errors
 app.use((err, req, res, next) => {
   if (req.file) {
-    fs.unlink(req.file.path, (err) => {
-      console.log("File removed successfully", err);
+    fs.unlink(req.file.path, (unlinkErr) => {
+      if (unlinkErr) {
+        console.error("Failed to remove file:", unlinkErr);
+      } else {
+        console.info("File removed successfully");
+      }
     });
   }
+
+  if (!req.file) {
+    console.info("No file to remove");
+  }
+
   if (res.headersSent) {
     return next(err);
   }
-  res
-    .status(err.code || 500)
-    .json({ error: err.message || "An unknown error occurred!" });
+
+  // Ensure err.code is a valid HTTP status code
+  const statusCode = typeof err.code === "number" ? err.code : 500;
+
+  res.status(statusCode).json({
+    error: err.message || "An unknown error occurred!",
+  });
 });
 
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.info("Connected to MongoDB");
     app.listen(PORT, () => {
       console.info(`Server is running on http://localhost:${PORT}`);
     });

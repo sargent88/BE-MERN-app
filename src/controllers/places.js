@@ -172,7 +172,7 @@ async function deletePlaceById(req, res, next) {
   }
 
   fs.unlink(imagePath, (err) => {
-    console.log("File removed successfully", err);
+    console.info("File removed successfully", err);
   });
 
   res.status(200).json({ message: "Deleted place." });

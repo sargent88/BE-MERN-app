@@ -59,7 +59,7 @@ async function createPlace(req, res, next) {
     );
   }
 
-  const { title, description, address, creator } = req.body;
+  const { title, description, address } = req.body;
   let coordinates;
   try {
     coordinates = await getCoordsForAddress(address);
@@ -74,12 +74,12 @@ async function createPlace(req, res, next) {
     // image: `https://placehold.co/150X150?text=${title.split(" ").join("+")}`, // placeholder image
     image: req.file.path,
     location: coordinates,
-    creator,
+    creator: req.userData.userId,
   });
 
   let user;
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req.userData.userId);
   } catch (err) {
     return next(new HttpError("Creating place failed, please try again.", 500));
   }
@@ -126,6 +126,12 @@ async function updatePlaceById(req, res, next) {
     );
   }
 
+  if (updatedPlace.creator.toString() !== req.userData.userId) {
+    return next(
+      new HttpError("You are not authorized to edit this place.", 401)
+    );
+  }
+
   updatedPlace.title = title;
   updatedPlace.description = description;
 
@@ -154,6 +160,12 @@ async function deletePlaceById(req, res, next) {
 
   if (!place) {
     return next(new HttpError("Could not find place for this id.", 404));
+  }
+
+  if (place.creator.id !== req.userData.userId) {
+    return next(
+      new HttpError("You are not authorized to delete this place.", 401)
+    );
   }
 
   const imagePath = place.image;

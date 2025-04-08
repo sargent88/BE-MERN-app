@@ -5,6 +5,7 @@ const checkAuthorization = (req, res, next) => {
   if (req.method === "OPTIONS") {
     return next();
   }
+
   try {
     const authHeader = req.headers.authorization;
 
@@ -14,16 +15,14 @@ const checkAuthorization = (req, res, next) => {
 
     const token = authHeader.split(" ")[1];
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        throw new Error("Invalid token");
-      }
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.userData = decoded;
-      next();
-    });
+    req.userData = {
+      userId: decodedToken.userId,
+    };
+    next();
   } catch (err) {
-    return next(new HttpError("Authorization failed, please try again", 401));
+    return next(new HttpError("Authorization failed, please try again", 403));
   }
 };
 

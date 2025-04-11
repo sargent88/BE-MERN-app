@@ -14,6 +14,7 @@ const userSchema = new Schema({
     default: Date.now,
     get: (val) => val.toISOString().split("T")[0], // Format date as YYYY-MM-DD
   },
+  role: { type: mongoose.Types.ObjectId, required: true, ref: "Role" },
 });
 
 userSchema.plugin(uniqueValidator);

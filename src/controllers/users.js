@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const HttpError = require("../models/httpError");
 const User = require("../models/user");
+const Role = require("../models/roles");
 
 async function getUsers(req, res) {
   let users;
@@ -74,6 +75,23 @@ async function createUser(req, res, next) {
     return next(new HttpError("Could not create user, please try again.", 500));
   }
 
+  let userRole;
+  try {
+    userRole = await Role.findOne({ title: "user" });
+    if (!userRole) {
+      return next(
+        new HttpError(
+          'Default "user" role not found. Please contact support.',
+          500
+        )
+      );
+    }
+  } catch (err) {
+    return next(
+      new HttpError("Fetching roles failed, please try again later.", 500)
+    );
+  }
+
   const createdUser = new User({
     name,
     email,
@@ -81,6 +99,7 @@ async function createUser(req, res, next) {
     // image: `https://placehold.co/150X150?text=${name.split(" ").join("+")}`, // placeholder image
     image: req.file.path,
     places: [],
+    role: userRole._id,
   });
 
   try {
